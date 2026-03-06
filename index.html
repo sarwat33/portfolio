@@ -650,7 +650,7 @@
 
 
 <!-- ============================================================
-     PAGE 2 — ACADEMIC
+     PAGE 2 — PROJECTS
 ============================================================ -->
 <div class="page" id="page-projects">
   <div class="container">
@@ -899,7 +899,7 @@
 
 
 <!-- ============================================================
-     PAGE 3 — PROJECTS
+     PAGE 3 — ACADEMIC
 ============================================================ -->
 <div class="page" id="page-academic">
   <div class="container">
@@ -908,191 +908,425 @@
 
     <div class="edit-note">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Semester wise Course,Credit Hours and Final Grades</span>
+      <span>Semester wise Course, Credit Hours and Final Grades</span>
     </div>
 
-    <div class="sem-grid">
+    <style>
+      .parent-group {
+        margin-bottom: 28px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .parent-group-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px;
+        background: linear-gradient(90deg, rgba(0,212,255,.08), rgba(124,58,237,.05));
+        cursor: pointer;
+        user-select: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color .2s;
+      }
+      .parent-group.open .parent-group-head {
+        border-bottom-color: var(--border);
+      }
+      .parent-group-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .parent-group-icon {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        background: rgba(0,212,255,.1);
+        border: 1px solid rgba(0,212,255,.2);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .parent-group-title {
+        font-family: var(--font-head);
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: -.5px;
+      }
+      .parent-group-subtitle {
+        font-size: .8rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .parent-group-right {
+        display: flex; align-items: center; gap: 12px;
+      }
+      .parent-year-badge {
+        font-size: .78rem; font-weight: 700; letter-spacing: .5px;
+        background: rgba(124,58,237,.15);
+        border: 1px solid rgba(124,58,237,.3);
+        color: #a78bfa;
+        padding: 4px 12px;
+        border-radius: 999px;
+      }
+      .parent-chevron {
+        font-size: .9rem; color: var(--muted);
+        transition: transform .3s ease;
+        line-height: 1;
+      }
+      .parent-group.open .parent-chevron { transform: rotate(180deg); }
+      .parent-group-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .45s ease;
+      }
+      .parent-group.open .parent-group-body {
+        max-height: 9999px;
+      }
+      .parent-group-inner {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .parent-group-inner .sem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+        gap: 16px;
+        margin: 0;
+      }
+      /* Result cards for HSC/SSC (no credits column) */
+      .result-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: border-color .2s, box-shadow .2s;
+      }
+      .result-card:hover { border-color: rgba(0,212,255,.3); box-shadow: var(--glow); }
+      .result-card.open { border-color: rgba(0,212,255,.35); box-shadow: var(--glow); }
+      .result-card-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 20px;
+        background: linear-gradient(90deg, rgba(0,212,255,.06), transparent);
+        cursor: pointer;
+        user-select: none;
+      }
+      .result-card.open .result-card-head { border-bottom: 1px solid var(--border); }
+      .result-card-left { display: flex; align-items: center; gap: 12px; }
+      .result-card-name { font-family: var(--font-head); font-size: 1rem; font-weight: 700; }
+      .result-card-gpa {
+        font-size: .78rem; font-weight: 600; letter-spacing: .5px;
+        background: rgba(0,212,255,.1); border: 1px solid rgba(0,212,255,.2);
+        color: var(--accent); padding: 3px 10px; border-radius: 999px;
+      }
+      .result-card-chevron {
+        font-size: .85rem; color: var(--muted);
+        transition: transform .3s ease; line-height: 1;
+      }
+      .result-card.open .result-card-chevron { transform: rotate(180deg); }
+      .result-card-body {
+        max-height: 0; overflow: hidden;
+        transition: max-height .35s ease;
+      }
+      .result-card.open .result-card-body { max-height: 800px; }
+      @media (max-width: 700px) {
+        .parent-group-inner .sem-grid { grid-template-columns: 1fr; }
+      }
+    </style>
 
-      <!-- ✏️ ======= SEMESTER 1 — EDIT BELOW ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 1</span>
-            <span class="sem-gpa">GPA: 3.99/4</span>
+    <!-- ===================== PARENT GROUP 1: BSc ===================== -->
+    <div class="parent-group" id="group-bsc">
+      <div class="parent-group-head" onclick="toggleGroup('group-bsc')">
+        <div class="parent-group-left">
+          <div class="parent-group-icon">🎓</div>
+          <div>
+            <div class="parent-group-title">BSc in Electrical &amp; Electronics Engineering</div>
+            <div class="parent-group-subtitle">CUET · Ongoing</div>
           </div>
-          <span class="sem-chevron">▼</span>
         </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <!-- ✏️ EDIT: Change course names, credits, grades. Grade classes: grade-A grade-B grade-C grade-IP -->
-            <tr><td>Engineering Physics</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Mathematics(Calculus)</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Electrical Circuit-I</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Differential Equation and Matrices</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Engineering Economics</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Engineering Physics(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Electrical Circuits-I(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Civil Engineering Drawing</td><td>0.75</td><td><span class="grade-badge grade-IP">A</span></td></tr>
-
-          </tbody>
-        </table></div>
+        <div class="parent-group-right">
+          <span class="parent-year-badge">2024 – Present</span>
+          <span class="parent-chevron">▼</span>
+        </div>
       </div>
+      <div class="parent-group-body">
+        <div class="parent-group-inner">
+          <div class="sem-grid">
 
-      <!-- ✏️ ======= SEMESTER 2 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 2</span>
-            <span class="sem-gpa">GPA: 3.99/4</span>
+            <!-- ✏️ ======= SEMESTER 1 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 1</span>
+                  <span class="sem-gpa">GPA: 3.99/4</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Engineering Physics</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Mathematics(Calculus)</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Electrical Circuit-I</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Differential Equation and Matrices</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Engineering Economics</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Engineering Physics(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Electrical Circuits-I(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Civil Engineering Drawing</td><td>0.75</td><td><span class="grade-badge grade-IP">A</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 2 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 2</span>
+                  <span class="sem-gpa">GPA: 3.99/4</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Engineering Chemistry</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Vector Calculus and Complex Variables</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Electrical Circuit-II</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Computing Methods and Techniques for Engineering Analysis</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>English</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Engineering Chemistry(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Electrical Circuits-II(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                  <tr><td>Mechanical Engineering Drawing</td><td>0.75</td><td><span class="grade-badge grade-IP">A</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 3 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 3</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Signals and Systems</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Electronics-I</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Engineering Statistics</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Electrical Machines-I</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Engineering Ethics and Entrepreneurship</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Electronics-I(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Electrical Machine-I(Sessional)</td><td>0.75</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                  <tr><td>Simulation Lab</td><td>1.5</td><td><span class="grade-badge grade-IP"></span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 4 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 4</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Electromagnetics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Digital Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Analog Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Numerical Methods</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Electronics Lab I</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 5 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 5</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Microprocessors &amp; Microcontrollers</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Communication Engineering</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Control Systems</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Power Systems I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Electronics Lab II</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 6 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 6</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Power Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Digital Signal Processing</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>VLSI Design</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Machine Learning Basics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Power Lab</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 7 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 7</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Robotics Engineering</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Wireless Communications</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Embedded Systems</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Engineering Ethics</td><td>2</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Final Year Project I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <!-- ✏️ ======= SEMESTER 8 ======= -->
+            <div class="sem-card">
+              <div class="sem-card-head" onclick="toggleSem(this)">
+                <div class="sem-card-left">
+                  <span class="sem-name">Semester 8</span>
+                  <span class="sem-gpa">GPA: —</span>
+                </div>
+                <span class="sem-chevron">▼</span>
+              </div>
+              <div class="sem-body"><table>
+                <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Advanced Robotics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Internet of Things</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Elective I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Elective II</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                  <tr><td>Final Year Project II</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+          </div><!-- /sem-grid -->
+        </div><!-- /parent-group-inner -->
+      </div><!-- /parent-group-body -->
+    </div><!-- /group-bsc -->
+
+    <!-- ===================== PARENT GROUP 2: HSC ===================== -->
+    <div class="parent-group" id="group-hsc">
+      <div class="parent-group-head" onclick="toggleGroup('group-hsc')">
+        <div class="parent-group-left">
+          <div class="parent-group-icon">📘</div>
+          <div>
+            <div class="parent-group-title">HSC Result</div>
+            <div class="parent-group-subtitle">Higher Secondary Certificate · Science Group</div>
           </div>
-          <span class="sem-chevron">▼</span>
         </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Engineering Chemistry</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Vector Calculus and Complex Variables</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Electrical Circuit-II</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Computing Methods and Techniques for Engineering Analysis</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>English</td><td>3</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Engineering Chemistry(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Electrical Circuits-II(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
-            <tr><td>Mechanical Engineering Drawing</td><td>0.75</td><td><span class="grade-badge grade-IP">A</span></td></tr>
-          </tbody>
-        </table></div>
+        <div class="parent-group-right">
+          <span class="parent-year-badge">2022-2023</span>
+          <span class="parent-chevron">▼</span>
+        </div>
       </div>
-
-      <!-- ✏️ ======= SEMESTER 3 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 3</span>
-            <span class="sem-gpa">GPA: —</span>
+      <div class="parent-group-body">
+        <div class="parent-group-inner">
+          <div class="result-card open" id="hsc-card">
+            <div class="result-card-head" onclick="toggleResultCard('hsc-card')">
+              <div class="result-card-left">
+                <span class="result-card-name">HSC Subjects &amp; Grades</span>
+                <span class="result-card-gpa">GPA: 5.00</span>
+              </div>
+              <span class="result-card-chevron">▼</span>
+            </div>
+            <div class="result-card-body"><table>
+              <thead><tr><th>Subject</th><th>Grade</th></tr></thead>
+              <tbody>
+                <!-- ✏️ EDIT: Add your HSC subjects and grades here -->
+                <tr><td>Higher Mathematics First Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Higher Mathematics Second Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Physics First Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Physics Second Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Chemistry First Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Higher Second Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Biology First Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Biology Second Paper</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>ICT</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>English</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Bangla</td><td><span class="grade-badge grade-IP">A</span></td></tr>
+                
+              </tbody>
+            </table></div>
           </div>
-          <span class="sem-chevron">▼</span>
         </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Signals and Systems</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Electronics-I</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Engineering Statistics</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Electrical Machines-I</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Engineering Ethics and Entrepreneurship</td><td>3</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Electronics-I(Sessional)</td><td>1.5</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Electrical Machine-I(Sessional)</td><td>0.75</td><td><span class="grade-badge grade-IP"></span></td></tr>
-            <tr><td>Simulation Lab</td><td>1.5</td><td><span class="grade-badge grade-IP"></span></td></tr>
-          </tbody>
-        </table></div>
       </div>
+    </div><!-- /group-hsc -->
 
-      <!-- ✏️ ======= SEMESTER 4 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 4</span>
-            <span class="sem-gpa">GPA: —</span>
+    <!-- ===================== PARENT GROUP 3: SSC ===================== -->
+    <div class="parent-group" id="group-ssc">
+      <div class="parent-group-head" onclick="toggleGroup('group-ssc')">
+        <div class="parent-group-left">
+          <div class="parent-group-icon">📗</div>
+          <div>
+            <div class="parent-group-title">SSC Result</div>
+            <div class="parent-group-subtitle">Secondary School Certificate · Science Group</div>
           </div>
-          <span class="sem-chevron">▼</span>
         </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Electromagnetics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Digital Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Analog Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Numerical Methods</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Electronics Lab I</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-          </tbody>
-        </table></div>
+        <div class="parent-group-right">
+          <span class="parent-year-badge">2020-2021</span>
+          <span class="parent-chevron">▼</span>
+        </div>
       </div>
-
-      <!-- ✏️ ======= SEMESTER 5 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 5</span>
-            <span class="sem-gpa">GPA: —</span>
+      <div class="parent-group-body">
+        <div class="parent-group-inner">
+          <div class="result-card open" id="ssc-card">
+            <div class="result-card-head" onclick="toggleResultCard('ssc-card')">
+              <div class="result-card-left">
+                <span class="result-card-name">SSC Subjects &amp; Grades</span>
+                <span class="result-card-gpa">GPA: ✏️</span>
+              </div>
+              <span class="result-card-chevron">▼</span>
+            </div>
+            <div class="result-card-body"><table>
+              <thead><tr><th>Subject</th><th>Grade</th></tr></thead>
+              <tbody>
+                <!-- ✏️ EDIT: Add your SSC subjects and grades here -->
+                <tr><td>Higher Mathematics</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Mathematics</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Physics</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Chemistry</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Biology</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>ICT</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>English</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+                <tr><td>Bangla</td><td><span class="grade-badge grade-IP">A+</span></td></tr>
+              </tbody>
+            </table></div>
           </div>
-          <span class="sem-chevron">▼</span>
         </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Microprocessors & Microcontrollers</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Communication Engineering</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Control Systems</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Power Systems I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Electronics Lab II</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-          </tbody>
-        </table></div>
       </div>
+    </div><!-- /group-ssc -->
 
-      <!-- ✏️ ======= SEMESTER 6 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 6</span>
-            <span class="sem-gpa">GPA: —</span>
-          </div>
-          <span class="sem-chevron">▼</span>
-        </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Power Electronics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Digital Signal Processing</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>VLSI Design</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Machine Learning Basics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Power Lab</td><td>1.5</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-          </tbody>
-        </table></div>
-      </div>
-
-      <!-- ✏️ ======= SEMESTER 7 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 7</span>
-            <span class="sem-gpa">GPA: —</span>
-          </div>
-          <span class="sem-chevron">▼</span>
-        </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Robotics Engineering</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Wireless Communications</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Embedded Systems</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Engineering Ethics</td><td>2</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Final Year Project I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-          </tbody>
-        </table></div>
-      </div>
-
-      <!-- ✏️ ======= SEMESTER 8 ======= -->
-      <div class="sem-card">
-        <div class="sem-card-head" onclick="toggleSem(this)">
-          <div class="sem-card-left">
-            <span class="sem-name">Semester 8</span>
-            <span class="sem-gpa">GPA: —</span>
-          </div>
-          <span class="sem-chevron">▼</span>
-        </div>
-        <div class="sem-body"><table>
-          <thead><tr><th>Course</th><th>Credits</th><th>Grade</th></tr></thead>
-          <tbody>
-            <tr><td>Advanced Robotics</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Internet of Things</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Elective I</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Elective II</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-            <tr><td>Final Year Project II</td><td>3</td><td><span class="grade-badge grade-IP">—</span></td></tr>
-          </tbody>
-        </table></div>
-      </div>
-
-    </div><!-- /sem-grid -->
   </div>
 </div><!-- /page-academic -->
 
@@ -1121,6 +1355,16 @@
     document.getElementById('page-' + id).classList.add('active');
     if (el) el.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Parent group expand/collapse
+  function toggleGroup(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  // Result card (HSC/SSC) expand/collapse
+  function toggleResultCard(id) {
+    document.getElementById(id).classList.toggle('open');
   }
 
   // Semester card expand/collapse
