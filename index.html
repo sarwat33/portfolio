@@ -136,8 +136,8 @@
        ██████  HOME PAGE
     ========================================================= */
     .hero {
-      display: grid; grid-template-columns: 1fr auto;
-      gap: 48px; align-items: center;
+      display: grid; grid-template-columns: 1fr 220px auto;
+      gap: 32px; align-items: center;
       padding: 56px 0 40px;
     }
     .hero-tag {
@@ -191,6 +191,21 @@
       animation: spin 18s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Neural Network Animation */
+    .neural-net-section {
+      width: 220px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #neuralCanvas {
+      width: 220px;
+      height: 260px;
+      display: block;
+    }
 
     /* Info chips */
     .info-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
@@ -545,6 +560,7 @@
       .nav-links a { padding: 5px 10px; font-size: .78rem; }
       .hero { grid-template-columns: 1fr; text-align: center; }
       .hero-photo-wrap { order: -1; margin: 0 auto; }
+      .neural-net-section { display: none; }
       .hero-btns, .info-chips, .socials { justify-content: center; }
       .cv-pages { grid-template-columns: 1fr; }
       .sem-grid { grid-template-columns: 1fr; }
@@ -564,6 +580,8 @@
     <a href="javascript:void(0)" class="active" onclick="showPage('home',this)">Home</a>
     <a href="javascript:void(0)" onclick="showPage('projects',this)">Projects</a>
     <a href="javascript:void(0)" onclick="showPage('academic',this)">Academic</a>
+    <a href="javascript:void(0)" onclick="showPage('achievements',this)">Achievements</a>
+    <a href="javascript:void(0)" onclick="showPage('research',this)">Research</a>
   </div>
 </nav>
 
@@ -603,6 +621,11 @@
       </div>
 
       <!-- ✏️ EDIT: Replace photo — place your image file next to index.html and change src -->
+      <!-- Neural Net Animation (middle column) -->
+      <div class="neural-net-section">
+        <canvas id="neuralCanvas"></canvas>
+      </div>
+
       <div class="hero-photo-wrap">
         <div class="hero-photo-ring"></div>
         <!-- Option A: use a real photo — uncomment and edit src:
@@ -1336,6 +1359,330 @@
 
 
 <!-- ============================================================
+     PAGE 4 — RESEARCH
+============================================================ -->
+<div class="page" id="page-research">
+  <div class="container">
+    <h2 class="section-title">Research <span>Work</span></h2>
+    <p class="section-sub">Papers, publications, and ongoing research in electrical engineering and beyond.</p>
+
+    <div class="edit-note">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+
+    <style>
+      .research-list { display: flex; flex-direction: column; gap: 20px; }
+      .research-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 28px;
+        transition: border-color .2s, box-shadow .2s;
+      }
+      .research-card:hover { border-color: rgba(0,212,255,.35); box-shadow: var(--glow); }
+      .research-card-top {
+        display: flex; align-items: flex-start;
+        justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .research-type-badge {
+        font-size: .7rem; font-weight: 700; letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 11px; border-radius: 999px;
+      }
+      .badge-journal   { background: rgba(0,212,255,.12); border: 1px solid rgba(0,212,255,.25); color: var(--accent); }
+      .badge-conference{ background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.3);  color: #a78bfa; }
+      .badge-preprint  { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.25); color: #fbbf24; }
+      .research-year-chip {
+        font-size: .75rem; color: var(--muted);
+        background: rgba(255,255,255,.06); border: 1px solid var(--border);
+        padding: 3px 10px; border-radius: 999px;
+      }
+      .research-title {
+        font-family: var(--font-head);
+        font-size: 1.05rem; font-weight: 700;
+        line-height: 1.4; margin-bottom: 8px;
+      }
+      .research-authors { font-size: .83rem; color: var(--muted); margin-bottom: 4px; }
+      .research-authors strong { color: var(--accent); }
+      .research-venue  { font-size: .82rem; color: var(--muted); font-style: italic; margin-bottom: 14px; }
+      .research-abstract {
+        font-size: .84rem; color: var(--muted); line-height: 1.65;
+        border-left: 2px solid var(--border); padding-left: 14px;
+        margin-bottom: 18px;
+      }
+      .research-footer { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+      .doi-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: .75rem; font-weight: 600; font-family: monospace;
+        background: rgba(255,255,255,.04); border: 1px solid var(--border);
+        color: var(--muted); padding: 5px 12px; border-radius: 8px;
+        text-decoration: none; transition: border-color .2s, color .2s;
+      }
+      .doi-badge:hover { border-color: var(--accent); color: var(--accent); }
+      .research-link-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: .78rem; font-weight: 600; color: var(--accent);
+        padding: 5px 14px; border: 1px solid rgba(0,212,255,.25);
+        border-radius: 999px; text-decoration: none;
+        transition: background .2s;
+      }
+      .research-link-btn:hover { background: rgba(0,212,255,.1); }
+    </style>
+
+    <div class="research-list">
+
+      <!-- ✏️ PAPER 1 -->
+      <div class="research-card">
+        <div class="research-card-top">
+          <span class="research-type-badge badge-journal">Mock Paper in IEEE Conference Format for Course: EEE222 (Circuit Simulation and Shop Practise)</span>
+          <span class="research-year-chip">2026</span>
+        </div>
+        <div class="research-title">Adjustable DC to DC Boost Converter using NE555 Timer IC</div>
+        <div class="research-authors"><strong>Sarwat Razzaque Choudhury</strong>, <strong>Ihtesamul Haque Samir,MD.Naimur Rahman Toky</strong></div>
+        <div class="research-venue"></div>
+        <div class="research-abstract">
+          This paper presents the design and experimental validation of an adjustable DC–DC boost converter built around the NE555 timer IC in astable mode. The proposed topology achieves a 8.88x boosting with a 9 V input while delivering up to 80 V output, making it suitable for portable and battery operated systems. Switching frequency optimisation and MOSFET gate drive analysis are discussed in detail.
+        </div>
+        <div class="research-footer">
+          <a href="https://drive.google.com/file/d/1RVzmMZ0m1UyT8Qybhl4RmfdoJDlwh2b7/view?usp=drive_link" target="_blank" class="doi-badge">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            DOI: N/A
+          </a>
+          <a href="https://drive.google.com/file/d/1RVzmMZ0m1UyT8Qybhl4RmfdoJDlwh2b7/view?usp=drive_link" target="_blank" class="research-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Read Paper
+          </a>
+        </div>
+      </div>
+
+      <!-- ✏️ PAPER 2 -->
+      
+
+      <!-- ✏️ PAPER 3 -->
+      
+
+    </div><!-- /research-list -->
+  </div>
+</div><!-- /page-research -->
+
+
+<!-- ============================================================
+     PAGE 5 — ACHIEVEMENTS
+============================================================ -->
+<div class="page" id="page-achievements">
+  <div class="container">
+    <h2 class="section-title">Achieve<span>ments</span></h2>
+    <p class="section-sub">Awards, scholarships, competitions, and recognitions.</p>
+
+    <div class="edit-note">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Awards and Competitions Participated</span>
+    </div>
+
+    <style>
+      .achieve-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+      }
+      .achieve-card {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: var(--radius); overflow: hidden;
+        transition: transform .25s, border-color .25s, box-shadow .25s;
+        display: flex; flex-direction: column;
+      }
+      .achieve-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0,212,255,.35);
+        box-shadow: var(--glow);
+      }
+      .achieve-thumb {
+        width: 100%; aspect-ratio: 16/7;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2.8rem;
+      }
+      .achieve-thumb-gold   { background: linear-gradient(135deg, rgba(251,191,36,.15), rgba(245,158,11,.08)); }
+      .achieve-thumb-purple { background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(167,139,250,.06)); }
+      .achieve-thumb-blue   { background: linear-gradient(135deg, rgba(0,212,255,.12),  rgba(59,130,246,.06)); }
+      .achieve-thumb-green  { background: linear-gradient(135deg, rgba(16,185,129,.12), rgba(5,150,105,.06)); }
+      .achieve-body { padding: 18px 20px; flex: 1; }
+      .achieve-date { font-size: .75rem; color: var(--muted); margin-bottom: 6px; letter-spacing: .5px; }
+      .achieve-title {
+        font-family: var(--font-head); font-size: 1.02rem; font-weight: 700;
+        margin-bottom: 8px; line-height: 1.35;
+      }
+      .achieve-desc  { font-size: .84rem; color: var(--muted); line-height: 1.6; }
+      .achieve-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+      .achieve-tag {
+        font-size: .72rem; font-weight: 500;
+        background: rgba(0,212,255,.08); border: 1px solid rgba(0,212,255,.18);
+        color: var(--accent); padding: 2px 9px; border-radius: 999px;
+      }
+      .achieve-footer {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 20px; border-top: 1px solid var(--border);
+      }
+      .achieve-rank {
+        font-size: .78rem; font-weight: 700;
+        background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.25);
+        color: #fbbf24; padding: 3px 10px; border-radius: 999px;
+      }
+      .achieve-link-btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: .78rem; font-weight: 600; color: var(--accent);
+        padding: 5px 12px; border: 1px solid rgba(0,212,255,.25);
+        border-radius: 999px; text-decoration: none; transition: background .2s;
+      }
+      .achieve-link-btn:hover { background: rgba(0,212,255,.1); }
+    </style>
+
+    <div class="achieve-grid">
+
+      <!-- ✏️ ACHIEVEMENT 1 -->
+      <div class="achieve-card">
+        <div class="achieve-thumb achieve-thumb-gold">
+          <img src="..\index\images\scholarship_hsc.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
+
+        </div>
+        <div class="achieve-body">
+          <div class="achieve-date">2023</div>
+          <div class="achieve-title">HSC Government Scholarship</div>
+          <div class="achieve-desc">Awarded Government Scholarship for achiveing 92 percent marks in Higher Secondary School Certificate exam.</div>
+          <div class="achieve-tags">
+            <span class="achieve-tag">Academic Excellence</span>
+            <span class="achieve-tag">Education Board Sylhet</span>
+            
+          </div>
+        </div>
+        <div class="achieve-footer">
+          <span class="achieve-rank">Scholarship</span>
+          <a href="https://sylhetboard.gov.bd/public/attachment/2024/1/HSC2023_SCHOLAR.pdf" class="achieve-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Details
+          </a>
+        </div>
+        
+      </div>
+
+      <!-- ✏️ ACHIEVEMENT 2 -->
+      <div class="achieve-card">
+        <div class="achieve-thumb achieve-thumb-blue">
+          <img src="..\index\images\aiba_final.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Techathon"/> 
+        </div>
+        <div class="achieve-body">
+          <div class="achieve-date">2022</div>
+          <div class="achieve-title">3rd Position AIBA-Inter College Quiz Competition</div>
+          <div class="achieve-desc">Secured 3rd position in the Inter College Quiz Competition arranged by Army Institute of Business Administration,Sylhet</div>
+          <div class="achieve-tags">
+            <span class="achieve-tag">Quiz</span>
+            
+           
+          </div>
+        </div>
+        <div class="achieve-footer">
+          <span class="achieve-rank">🏅 3rd</span>
+          <a href="https://www.facebook.com/share/v/1CknMCcLJE/" class="achieve-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Details
+          </a>
+        </div>
+      </div>
+
+      <!-- ✏️ ACHIEVEMENT 3 -->
+      <div class="achieve-card">
+        <div class="achieve-thumb achieve-thumb-blue">
+          <img src="..\index\images\mie.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Techathon"/> 
+        </div>
+        <div class="achieve-body">
+          <div class="achieve-date">2025</div>
+          <div class="achieve-title">10th Place MIE Robolution(Techathon)</div>
+          <div class="achieve-desc">Solved hardware and software problems.</div>
+          <div class="achieve-tags">
+            <span class="achieve-tag">Arduino</span>
+            <span class="achieve-tag">C</span>
+           
+          </div>
+        </div>
+        <div class="achieve-footer">
+          <span class="achieve-rank">🏅 Top 10</span>
+          <a href="https://mierobolution.com/" class="achieve-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Details
+          </a>
+        </div>
+        
+      </div>
+
+      <!-- ✏️ ACHIEVEMENT 4 -->
+      <div class="achieve-card">
+        <div class="achieve-thumb achieve-thumb-purple">
+          <img src="..\index\images\quiz_school.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
+        </div>
+        <div class="achieve-body">
+          <div class="achieve-date">2021</div>
+          <div class="achieve-title">2nd Position-Inter School Quiz Competition</div>
+          <div class="achieve-desc">Secured 2nd Position in the Inter School Quiz Competition arranged by Upazilla Parishad,Sylhet.</div>
+          <div class="achieve-tags">
+            <span class="achieve-tag">Quiz</span>
+            
+            
+          </div>
+        </div>
+        <div class="achieve-footer">
+          <span class="achieve-rank">🏅 2nd</span>
+          <a href="#" class="achieve-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            N/A
+          </a>
+        </div>
+      </div>
+
+      <!-- ✏️ ACHIEVEMENT 5 -->
+       <div class="achieve-card">
+        <div class="achieve-thumb achieve-thumb-purple">
+          <img src="..\index\images\ssc_scholarship.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
+        </div>
+        <div class="achieve-body">
+          <div class="achieve-date">2021</div>
+          <div class="achieve-title">SSC Government Scholarship</div>
+          <div class="achieve-desc">Awarded SSC Government scholarship for scoring 98 percent marks.</div>
+          <div class="achieve-tags">
+            <span class="achieve-tag">Academic Excellence</span>
+            <span class="achieve-tag">Education Board,Sylhet</span>
+
+            
+            
+          </div>
+        </div>
+        <div class="achieve-footer">
+          <span class="achieve-rank">Scholarship</span>
+          <a href="https://edunews.com.bd/wp-content/uploads/2022/02/sylhet-Scvholarship.pdf" class="achieve-link-btn">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Details
+          </a>
+        </div>
+      </div>
+      
+      <!-- ✏️ ACHIEVEMENT 6 -->
+     
+
+    </div><!-- /achieve-grid -->
+  </div>
+</div><!-- /page-achievements -->
+
+
+<!-- ============================================================
      FOOTER
 ============================================================ -->
 <footer>
@@ -1388,6 +1735,116 @@
       hint.textContent = '▴ Click to collapse';
     }
   }
+
+  // ── Neural Network Animation ──────────────────────────────────
+  (function() {
+    const canvas = document.getElementById('neuralCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // Layers: number of nodes per layer
+    const layers = [2, 3, 4, 3, 4, 3, 2];
+    const FIXED_W = 220;
+    const FIXED_H = 260;
+
+    // Set canvas pixel resolution
+    const DPR = window.devicePixelRatio || 1;
+    canvas.width  = FIXED_W * DPR;
+    canvas.height = FIXED_H * DPR;
+    ctx.scale(DPR, DPR);
+
+    // Build node positions
+    const nodes = [];
+    const lCount = layers.length;
+    for (let l = 0; l < lCount; l++) {
+      const x = 20 + (l / (lCount - 1)) * (FIXED_W - 40);
+      const nCount = layers[l];
+      for (let n = 0; n < nCount; n++) {
+        const y = 20 + ((n + 0.5) / nCount) * (FIXED_H - 40);
+        nodes.push({ l, n, x, y });
+      }
+    }
+
+    // Sequential blink: go node by node across all layers left to right
+    let seq = [];
+    for (let l = 0; l < lCount; l++) {
+      nodes.filter(nd => nd.l === l).forEach(nd => seq.push(nd));
+    }
+
+    let seqIdx  = 0;    // which node is active
+    let phase   = 0;    // 0..1 for fade in/out of current node
+    let dir     = 1;    // 1=fade in, -1=fade out
+    const SPEED = 0.035;
+
+    function draw() {
+      ctx.clearRect(0, 0, FIXED_W, FIXED_H);
+
+      // Draw edges
+      for (let l = 0; l < lCount - 1; l++) {
+        const from = nodes.filter(nd => nd.l === l);
+        const to   = nodes.filter(nd => nd.l === l + 1);
+        from.forEach(fn => {
+          to.forEach(tn => {
+            ctx.beginPath();
+            ctx.moveTo(fn.x, fn.y);
+            ctx.lineTo(tn.x, tn.y);
+            ctx.strokeStyle = 'rgba(0,212,255,0.08)';
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          });
+        });
+      }
+
+      const active = seq[seqIdx];
+
+      // Draw nodes
+      nodes.forEach(nd => {
+        const isActive = (nd === active);
+        const r = 5;
+
+        if (isActive && phase > 0) {
+          // Outer glow
+          const grd = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, r * 4);
+          grd.addColorStop(0, `rgba(0,212,255,${0.45 * phase})`);
+          grd.addColorStop(1, 'rgba(0,212,255,0)');
+          ctx.beginPath();
+          ctx.arc(nd.x, nd.y, r * 4, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+
+          // Bright core
+          ctx.beginPath();
+          ctx.arc(nd.x, nd.y, r + 2 * phase, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0,212,255,${0.3 + 0.7 * phase})`;
+          ctx.strokeStyle = `rgba(0,212,255,${phase})`;
+          ctx.lineWidth = 1.5;
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          // Dim node
+          ctx.beginPath();
+          ctx.arc(nd.x, nd.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0,212,255,0.10)';
+          ctx.strokeStyle = 'rgba(0,212,255,0.28)';
+          ctx.lineWidth = 1;
+          ctx.fill();
+          ctx.stroke();
+        }
+      });
+
+      // Advance phase
+      phase += dir * SPEED;
+      if (phase >= 1) { phase = 1; dir = -1; }
+      if (phase <= 0) {
+        phase = 0; dir = 1;
+        seqIdx = (seqIdx + 1) % seq.length;
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  })();
 </script>
 
 </body>
