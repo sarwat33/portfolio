@@ -6,20 +6,6 @@
   <title>Sarwat Razzaque Choudhury</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- ── Preload all card images in background immediately ── -->
-  <link rel="preload" as="image" href="..\index\images\booster_img.png">
-  <link rel="preload" as="image" href="..\index\images\webapp_img.jpeg">
-  <link rel="preload" as="image" href="..\index\images\pcb_img.png">
-  <link rel="preload" as="image" href="..\index\images\space_invader_img.avif">
-  <link rel="preload" as="image" href="..\index\images\imdb_img.png">
-  <link rel="preload" as="image" href="..\index\images\todo_img.jpg">
-  <link rel="preload" as="image" href="..\index\images\wordle_img.png">
-  <link rel="preload" as="image" href="..\index\images\scholarship_hsc.png">
-  <link rel="preload" as="image" href="..\index\images\aiba_final.png">
-  <link rel="preload" as="image" href="..\index\images\mie.png">
-  <link rel="preload" as="image" href="..\index\images\quiz_school.png">
-  <link rel="preload" as="image" href="..\index\images\ssc_scholarship.png">
-
 <style>
   h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 700; }
   p, body { font-family: 'DM Sans', sans-serif; font-weight: 400; }
@@ -74,37 +60,43 @@
     ========================================================= */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px;
-      height: 64px;
-      background: rgba(9,12,16,.85);
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 12px;
+      height: 56px;
+      background: rgba(9,12,16,.92);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo {
-      font-family: var(--font-head);
-      font-weight: 800; font-size: 1.1rem;
-      letter-spacing: -.5px;
-      color: var(--accent);
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      max-width: 600px;
+      justify-content: center;
     }
-    .nav-links { display: flex; gap: 8px; }
     .nav-links a {
-      padding: 6px 16px;
+      flex: 1;
+      text-align: center;
+      padding: 7px 6px;
       border-radius: 999px;
-      font-size: .85rem; font-weight: 500;
+      font-size: .82rem; font-weight: 500;
       color: var(--muted);
       transition: color .2s, background .2s;
+      white-space: nowrap;
     }
     .nav-links a:hover,
     .nav-links a.active {
       color: var(--text);
       background: var(--border);
     }
+    @media (max-width: 400px) {
+      .nav-links a { font-size: .72rem; padding: 6px 4px; }
+    }
 
     /* =========================================================
        PAGE SECTIONS (tab system)
     ========================================================= */
-    .page { display: none; padding-top: 80px; min-height: 100vh; position: relative; z-index: 1; }
+    .page { display: none; padding-top: 68px; min-height: 100vh; position: relative; z-index: 1; }
     .page.active { display: block; animation: fadeUp .45s ease both; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(22px); }
@@ -427,43 +419,6 @@
     .proj-thumb img {
       width: 100%; height: 100%; object-fit: cover;
     }
-
-    /* =========================================================
-       IMAGE LAZY LOAD + SHIMMER SKELETON
-    ========================================================= */
-    .img-wrap {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background: var(--surface);
-    }
-    .img-wrap::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg,
-        var(--surface) 25%,
-        rgba(255,255,255,0.06) 50%,
-        var(--surface) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-      z-index: 1;
-      transition: opacity .3s;
-    }
-    .img-wrap.loaded::before { opacity: 0; pointer-events: none; }
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    .img-wrap img {
-      width: 100%; height: 160px;
-      object-fit: cover;
-      display: block;
-      border-radius: 8px;
-      opacity: 0;
-      transition: opacity .35s ease;
-      position: relative; z-index: 2;
-    }
-    .img-wrap.loaded img { opacity: 1; }
     .proj-thumb-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(9,12,16,.7), transparent);
@@ -606,31 +561,10 @@
        RESPONSIVE
     ========================================================= */
     @media (max-width: 700px) {
-      nav { padding: 0 12px; }
-      .nav-logo { font-size: .9rem; flex-shrink: 0; }
-      .nav-links {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        flex-wrap: nowrap;
-        gap: 4px;
-      }
-      .nav-links::-webkit-scrollbar { display: none; }
-      .nav-links a { padding: 5px 10px; font-size: .75rem; white-space: nowrap; }
-      .hero {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        text-align: center;
-      }
+      nav { padding: 0 8px; }
+      .hero { grid-template-columns: 1fr; text-align: center; }
       .hero-photo-wrap { order: -1; margin: 0 auto; }
-      .neural-net-section {
-        display: flex;
-        order: 1;
-        margin: 0 auto;
-        width: 180px;
-        height: 200px;
-      }
-      #neuralCanvas { width: 180px; height: 200px; }
+      .neural-net-section { display: none; }
       .hero-btns, .info-chips, .socials { justify-content: center; }
       .cv-pages { grid-template-columns: 1fr; }
       .sem-grid { grid-template-columns: 1fr; }
@@ -644,8 +578,6 @@
      NAVBAR
 ============================================================ -->
 <nav>
-  <!-- ✏️ EDIT: Change initials/name below -->
-  <div class="nav-logo">SRC</div>
   <div class="nav-links">
     <a href="javascript:void(0)" class="active" onclick="showPage('home',this)">Home</a>
     <a href="javascript:void(0)" onclick="showPage('projects',this)">Projects</a>
@@ -760,7 +692,9 @@
       <!-- EEE Projects-->
        <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-        <div class="img-wrap"><img src="..\index\images\booster_img.png" alt="Booster" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>  
+        <img src="..\index\images\booster_img.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Booster"/>  
        <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
           <div class="proj-date">📅 2026</div>
@@ -792,7 +726,9 @@
       
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\webapp_img.jpeg" alt="DigitalMySchool" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\webapp_img.jpeg" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="DigitalMySchool"/>
           
           <!-- ✏️ Replace emoji or use: <img src="yourimage.jpg" alt="project"> -->
         
@@ -829,7 +765,9 @@
       <!-- ✏️ ======= PROJECT 2 ======= -->
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\pcb_img.png" alt="PCB" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\pcb_img.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="PCB"/>
           <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
           <div class="proj-date">📅 2024-25</div>
@@ -858,7 +796,9 @@
       <!-- ✏️ ======= PROJECT 3 ======= -->
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\space_invader_img.avif" alt="Space Invader" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\space_invader_img.avif" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Space Invader"/>
           <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
           <div class="proj-date">📅 2021</div>
@@ -887,7 +827,9 @@
       <!-- ✏️ ======= PROJECT 4 ======= -->
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\imdb_img.png" alt="Space Invader" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\imdb_img.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Space Invader"/>
           <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
           <div class="proj-date">📅 2021</div>
@@ -917,7 +859,9 @@
       <!-- ✏️ ======= PROJECT 5 ======= -->
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\todo_img.jpg" alt="Space Invader" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\todo_img.jpg" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Space Invader"/>
           <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
           <div class="proj-date">📅 2021</div>
@@ -945,7 +889,9 @@
       <!-- ✏️ ======= PROJECT 7 ======= -->
       <div class="proj-card" onclick="toggleProject(this)">
         <div class="proj-thumb">
-          <div class="img-wrap"><img src="..\index\images\wordle_img.png" alt="Space Invader" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div>
+          <img src="..\index\images\wordle_img.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Space Invader"/>
           
           <div class="proj-thumb-overlay"></div></div>
         <div class="proj-body">
@@ -1605,7 +1551,9 @@
       <!-- ✏️ ACHIEVEMENT 1 -->
       <div class="achieve-card">
         <div class="achieve-thumb achieve-thumb-gold">
-          <div class="img-wrap"><img src="..\index\images\scholarship_hsc.png" alt="HSC Scholarship" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div> 
+          <img src="..\index\images\scholarship_hsc.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
 
         </div>
         <div class="achieve-body">
@@ -1631,7 +1579,9 @@
       <!-- ✏️ ACHIEVEMENT 2 -->
       <div class="achieve-card">
         <div class="achieve-thumb achieve-thumb-blue">
-          <div class="img-wrap"><img src="..\index\images\aiba_final.png" alt="Techathon" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div> 
+          <img src="..\index\images\aiba_final.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Techathon"/> 
         </div>
         <div class="achieve-body">
           <div class="achieve-date">2022</div>
@@ -1655,7 +1605,9 @@
       <!-- ✏️ ACHIEVEMENT 3 -->
       <div class="achieve-card">
         <div class="achieve-thumb achieve-thumb-blue">
-          <div class="img-wrap"><img src="..\index\images\mie.png" alt="Techathon" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div> 
+          <img src="..\index\images\mie.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="Techathon"/> 
         </div>
         <div class="achieve-body">
           <div class="achieve-date">2025</div>
@@ -1680,7 +1632,9 @@
       <!-- ✏️ ACHIEVEMENT 4 -->
       <div class="achieve-card">
         <div class="achieve-thumb achieve-thumb-purple">
-          <div class="img-wrap"><img src="..\index\images\quiz_school.png" alt="HSC Scholarship" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div> 
+          <img src="..\index\images\quiz_school.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
         </div>
         <div class="achieve-body">
           <div class="achieve-date">2021</div>
@@ -1704,7 +1658,9 @@
       <!-- ✏️ ACHIEVEMENT 5 -->
        <div class="achieve-card">
         <div class="achieve-thumb achieve-thumb-purple">
-          <div class="img-wrap"><img src="..\index\images\ssc_scholarship.png" alt="HSC Scholarship" loading="lazy" onload="this.parentElement.classList.add('loaded')"/></div> 
+          <img src="..\index\images\ssc_scholarship.png" 
+            style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;"
+            alt="HSC Scholarship"/> 
         </div>
         <div class="achieve-body">
           <div class="achieve-date">2021</div>
@@ -1797,10 +1753,8 @@
 
     // Layers: number of nodes per layer
     const layers = [2, 3, 4, 3, 4, 3, 2];
-
-    // Use actual rendered size so it works on mobile too
-    const FIXED_W = canvas.offsetWidth  || 220;
-    const FIXED_H = canvas.offsetHeight || 260;
+    const FIXED_W = 220;
+    const FIXED_H = 260;
 
     // Set canvas pixel resolution
     const DPR = window.devicePixelRatio || 1;
@@ -1899,25 +1853,6 @@
     }
 
     draw();
-  })();
-
-  // ── Preload all card images in JS (belt-and-suspenders) ──────
-  (function() {
-    const srcs = [
-      '..\\index\\images\\booster_img.png',
-      '..\\index\\images\\webapp_img.jpeg',
-      '..\\index\\images\\pcb_img.png',
-      '..\\index\\images\\space_invader_img.avif',
-      '..\\index\\images\\imdb_img.png',
-      '..\\index\\images\\todo_img.jpg',
-      '..\\index\\images\\wordle_img.png',
-      '..\\index\\images\\scholarship_hsc.png',
-      '..\\index\\images\\aiba_final.png',
-      '..\\index\\images\\mie.png',
-      '..\\index\\images\\quiz_school.png',
-      '..\\index\\images\\ssc_scholarship.png'
-    ];
-    srcs.forEach(src => { const img = new Image(); img.src = src; });
   })();
 </script>
 
